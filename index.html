@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Smart Home Dashboard</title>
+		<link rel="stylesheet" href="style.css" />
+		<script defer src="script.js"></script>
+		<script
+			src="https://kit.fontawesome.com/a076d05399.js"
+			crossorigin="anonymous"
+		></script>
+	</head>
+	<body>
+		<div class="dashboard">
+			<header>
+				<h1>Smart Home Control</h1>
+				<div class="security-status">
+					<span id="status-text">Not Armed</span>
+					<div id="status-indicator" class="red"></div>
+					<button class="dark-mode-toggle" onclick="toggleDarkMode()">
+						🌙
+					</button>
+				</div>
+			</header>
+			<section class="controls">
+				<div class="control-card" id="lights-control">
+					<i class="fas fa-lightbulb icon"></i>
+					<h2>Lights</h2>
+					<button class="toggle-btn" onclick="openLightsModal()">
+						Toggle
+					</button>
+				</div>
+
+				<div class="control-card" id="thermostat-control">
+					<i class="fas fa-thermometer-half icon"></i>
+					<h2>Thermostat</h2>
+					<button class="toggle-btn" onclick="openThermostatModal()">
+						Adjust
+					</button>
+				</div>
+				<div class="control-card">
+					<i class="fas fa-thermometer-half icon"></i>
+					<h2>Device Registration</h2>
+					<button class="toggle-btn" onclick="openDeviceModal()">
+						Register Device
+					</button>
+				</div>
+				<div class="control-card">
+					<i class="fas fa-thermometer-half icon"></i>
+					<h2>Advanced Access</h2>
+					<button class="toggle-btn" onclick="openAuthModal()">
+						Enter
+					</button>
+				</div>
+			</section>
+		</div>
+
+		<div id="lights-modal" class="modal hidden" style="display: none">
+			<div class="modal-content">
+				<h2>Light Control</h2>
+				<p>Click on a light to turn it ON/OFF.</p>
+				<div class="house-map">
+					<img
+						src="house-map.png"
+						alt="House Map"
+						class="map-image"
+					/>
+					<div
+						class="light-indicator"
+						id="living-room-light"
+						onclick="toggleRoomLight('living-room')"
+					></div>
+					<div
+						class="light-indicator"
+						id="kitchen-light"
+						onclick="toggleRoomLight('kitchen')"
+					></div>
+					<div
+						class="light-indicator"
+						id="bedroom-light"
+						onclick="toggleRoomLight('bedroom')"
+					></div>
+					<div
+						class="light-indicator"
+						id="kidroom-light"
+						onclick="toggleRoomLight('kidroom')"
+					></div>
+					<div
+						class="light-indicator"
+						id="bedrodroom-light"
+						onclick="toggleRoomLight('bedrodroom')"
+					></div>
+				</div>
+				<button class="close-auth" onclick="closeLightsModal()">
+					Close
+				</button>
+			</div>
+		</div>
+
+		<div id="thermostat-modal" class="modal hidden" style="display: none">
+			<div class="modal-content">
+				<h2>Thermostat Control</h2>
+				<p>Adjust the temperature for each room.</p>
+				<div class="house-map">
+					<img
+						src="house-map.png"
+						alt="House Map"
+						class="map-image"
+					/>
+					<div
+						class="temp-control"
+						id="living-room-temp"
+						onclick="openTempControl('living-room')"
+					>
+						<span class="temp-display" id="living-room-display"
+							>22°C</span
+						>
+						<div class="temp-bar" id="living-room-bar"></div>
+					</div>
+					<div
+						class="temp-control"
+						id="kitchen-temp"
+						onclick="openTempControl('kitchen')"
+					>
+						<span class="temp-display" id="kitchen-display"
+							>22°C</span
+						>
+						<div class="temp-bar" id="kitchen-bar"></div>
+					</div>
+					<div
+						class="temp-control"
+						id="bedroom-temp"
+						onclick="openTempControl('bedroom')"
+					>
+						<span class="temp-display" id="bedroom-display"
+							>22°C</span
+						>
+						<div class="temp-bar" id="bedroom-bar"></div>
+					</div>
+
+					<div
+						class="temp-control"
+						id="bedrodroom-temp"
+						onclick="openTempControl('bedrodroom')"
+					>
+						<span class="temp-display" id="bedrodroom-display"
+							>22°C</span
+						>
+						<div class="temp-bar" id="bedrodroom-bar"></div>
+					</div>
+
+					<div
+						class="temp-control"
+						id="kidroom-temp"
+						onclick="openTempControl('kidroom')"
+					>
+						<span class="temp-display" id="kidroom-display"
+							>22°C</span
+						>
+						<div class="temp-bar" id="kidroom-bar"></div>
+					</div>
+				</div>
+				<div id="temp-slider-container" class="hidden">
+					<input
+						type="range"
+						id="temp-slider"
+						min="16"
+						max="30"
+						value="22"
+						oninput="updateTemp()"
+					/>
+				</div>
+				<button class="close-auth" onclick="closeThermostatModal()">
+					Close
+				</button>
+			</div>
+		</div>
+
+		<div id="auth-modal" class="modal hidden" style="display: none">
+			<div class="modal-content">
+				<h2>Enter Password</h2>
+				<input
+					type="password"
+					id="auth-password"
+					class="auth-input"
+					placeholder="Enter password..."
+				/>
+				<button class="auth-btn" onclick="authenticateAccess()">
+					Submit
+				</button>
+				<button class="close-auth" onclick="closeAuthModal()">
+					Cancel
+				</button>
+				<p id="auth-error" class="error-message"></p>
+			</div>
+		</div>
+
+		<div id="advanced-panel" class="advanced-panel hidden">
+			<h2>Security & Camera Access</h2>
+			<div class="security-controls">
+				<h3>Security System</h3>
+				<button class="toggle-btn" onclick="toggleSecurity()">
+					Arm/Disarm
+				</button>
+			</div>
+			<div class="camera-feed">
+				<h3>Live Camera Feed</h3>
+				<div class="camera-box">[Camera Stream Placeholder]</div>
+			</div>
+
+			<section id="registered-devices" class="device-list">
+				<h2>Registered Devices</h2>
+				<ul id="device-list"></ul>
+			</section>
+			<button class="close-btn" onclick="closeAdvancedPanel()">
+				Close
+			</button>
+		</div>
+
+		<div id="device-modal" class="modal hidden" style="display: none">
+			<div class="modal-content">
+				<h2>Register New Device</h2>
+				<input
+					type="text"
+					id="device-name"
+					class="auth-input"
+					placeholder="Device Name"
+				/>
+				<select id="device-type" class="auth-input">
+					<option value="light">Light</option>
+					<option value="thermostat">Thermostat</option>
+					<option value="security">Security</option>
+				</select>
+				<input
+					type="text"
+					id="device-id"
+					class="auth-input"
+					placeholder="Unique Device ID"
+				/>
+				<button class="auth-btn" onclick="registerDevice()">
+					Register
+				</button>
+				<button class="close-auth" onclick="closeDeviceModal()">
+					Cancel
+				</button>
+				<p id="device-error" class="error-message"></p>
+			</div>
+		</div>
+	</body>
+</html>
